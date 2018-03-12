@@ -1,7 +1,7 @@
 const mongoose = require('mongoose'),
     jwt = require('jsonwebtoken'),
     bcrypt = require('bcrypt-nodejs'),
-    User = require("../models/User"),
+    Store = require("../models/Store"),
     config = require("../configs/config");
 
 function generateToken(user) {
@@ -32,7 +32,7 @@ exports.register = function (req, res) {
         return res.status(422).send({ error: 'You must enter a password.' });
     }
 
-    User.findOne({ email: email }, function (err, existingUser) {
+    Store.findOne({ email: email }, function (err, existingUser) {
         if (err) {
             res.send(400).json({ "error": err });
         }
@@ -42,12 +42,12 @@ exports.register = function (req, res) {
         }
 
         // If user is unique and password was provided, create account
-        let newUser = new User({
+        let newStore = new Store({
             user: user,
             password: password,
         });
 
-        newUser.save(function (err, user) {
+        newStore.save(function (err, user) {
             if (err) {
                 return res.send(400).json({ "error": err });
             }
@@ -61,18 +61,18 @@ exports.register = function (req, res) {
 };
 
 exports.login = function (req, res) {
-    User.findOne({
+    Store.findOne({
         email: req.body.email
-    }, function (err, user) {
+    }, function (err, store) {
         if (err) throw err;
-        if (!user) {
+        if (!store) {
             return res.status(401).json({ message: 'Authentication failed. User not found.' });
-        } else if (user) {
-            user.comparePassword(req.body.password, (err, isMatch) => {
+        } else if (store) {
+            store.comparePassword(req.body.password, (err, isMatch) => {
                 if (!isMatch) {
                     return res.status(401).json({ message: 'Authentication failed. Wrong password.' });
                 }
-                let userInfo = setUserInfo(user);
+                let userInfo = setUserInfo(store);
                 return res.json({
                     token: "JWT " + generateToken(userInfo),
                 });
