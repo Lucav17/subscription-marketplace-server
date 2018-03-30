@@ -6,7 +6,7 @@ const express = require('express'),
     mongoose = require('mongoose'),
     config = require('./configs/config'),
     jsonwebtoken = require('jsonwebtoken');
-    //router = require("./router");
+    router = require("./router");
 
 mongoose.connect(config.DATABASE, function(err, db) {
     if (err) {
@@ -52,7 +52,7 @@ app.use(function(req, res, next) {
     }
 })
 
-//router(app);
+router(app);
 
 // Start the server
 const server = app.listen(config.PORT, function(err, db) {
