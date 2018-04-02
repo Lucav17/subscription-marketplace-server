@@ -1,4 +1,4 @@
-const StoreAuthenticationController = require('./controllers/StoreController'),
+const StoreController = require('./controllers/StoreController'),
     ConsumerAuthenticationController = require('./controllers/ConsumerController'),
     AWSController = require('./controllers/AWSController'),
     express = require('express'),
@@ -10,16 +10,20 @@ module.exports = function (app) {
     // Initializing route groups
     const apiRoutes = express.Router(),
         consumerRoutes = express.Router(),
-        storeAuthRoutes = express.Router(),
+        storeRoutes = express.Router(),
         awsRoutes = express.Router();
 
    
     //SET THE BASE ROUTE FOR ALL STORE ROUTES
-    apiRoutes.use('/store/auth', storeAuthRoutes);
+    apiRoutes.use('/store/', storeRoutes);
     // Registration route for all stores
-    storeAuthRoutes.post('/register', StoreAuthenticationController.register);
+    storeRoutes.post('/auth/register', StoreController.register);
     // Log in route for all Stores
-    storeAuthRoutes.post('/login', StoreAuthenticationController.login);
+    storeRoutes.post('/auth/login', StoreController.login);
+    // Update email, password, basic owner information
+    storeRoutes.put('/account/details', StoreController.updateAccount);
+    // Update store information
+    storeRoutes.put('/account/store/details', StoreController.updateStoreInformation);
 
     //SET THE BASE ROUTE FOR ALL CONSUMER ROUTES
     apiRoutes.use('/customer/auth', consumerRoutes);
