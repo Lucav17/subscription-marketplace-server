@@ -31,6 +31,11 @@ const StoreSchema = new Schema(
       categories: [{ type: String }],
       features: [{ type: String }]
     },
+    social: {
+      facebook: { type: String },
+      instagram: { type: String },
+      pinterest: { type: String }
+    },
     plan: { type: String },
     listings: [{ type: String }]
     //STRIPE: {}

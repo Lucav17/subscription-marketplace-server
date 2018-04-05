@@ -1,6 +1,5 @@
 const mongoose = require("mongoose"),
   jwt = require("jsonwebtoken"),
-  bcrypt = require("bcrypt-nodejs"),
   Store = require("../models/Store"),
   bcrypt = require("bcrypt-nodejs"),
   config = require("../configs/config");
@@ -22,7 +21,7 @@ function setUserInfo(request) {
 
 //REGISTER USER
 exports.register = function(req, res) {
-  const email = req.body.user;
+  const email = req.body.email;
   const password = req.body.password;
 
   // Return error if no user provided
@@ -45,7 +44,7 @@ exports.register = function(req, res) {
         .send({ error: "That user address is already in use." });
     }
     let newStore = new Store({
-      user: user,
+      email: email,
       password: password
     });
 
@@ -62,28 +61,7 @@ exports.register = function(req, res) {
   });
 };
 
-exports.updateStoreInformation = (req, res) => {
-  Store.findByIdAndUpdate(
-    { _id: req.userID },
-    {
-      "store.storeName": req.storeName,
-      "store.storeDescription": req.storeDescr,
-      "store.image": req.storeImage,
-      "store.address": req.address,
-      "store.city": req.city,
-      "store.state": req.state,
-      "store.zipCode": req.zipCode,
-      "store.categories": req.categories
-    },
-    (err, result) => {
-      if (err) {
-        return res.status(400).send({ err: err });
-      }
-      return res.status(200).send({ result: result });
-    }
-  );
-};
-
+//UPDATE STORE ATTRIBUTE
 exports.updateStoreInformation = (req, res) => {
   if (
     !req.bod.storeName ||
@@ -238,6 +216,7 @@ exports.login = function(req, res) {
   );
 };
 
+//MIDDLEWARE FOR LOG IN REQUIRED FUNCTIONS
 exports.loginRequired = function(req, res, next) {
   if (req.user) {
     next();

@@ -15,7 +15,7 @@ module.exports = function (app) {
 
    
     //SET THE BASE ROUTE FOR ALL STORE ROUTES
-    apiRoutes.use('/store/', storeRoutes);
+    apiRoutes.use('/store', storeRoutes);
     // Registration route for all stores
     storeRoutes.post('/auth/register', StoreController.register);
     // Log in route for all Stores
